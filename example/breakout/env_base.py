@@ -8,12 +8,11 @@ import random
 import numpy as np
 import gym
 from gym.utils import seeding
-from gym.spaces import Discrete, Box
+from gym.spaces import Discrete, MultiDiscrete
 import pygame
 
 # Local imports
 from example.breakout.breakout_rl import Game
-
 
 class BreakoutEnv(gym.Env):
     """ Custom PyGame OpenAI Gym Environment 
@@ -24,9 +23,7 @@ class BreakoutEnv(gym.Env):
      
     The environment will provide the score as the rewards
     """
-
     metadata = {'render.modes': ['human', 'rgb_array']}
-
     def __init__(
         self, 
         mode = 'agent',
@@ -34,24 +31,24 @@ class BreakoutEnv(gym.Env):
         framerate = 60,
         output_size=64
     ):
+        super(BreakoutEnv, self).__init__()
         self.mode = mode
         self.lives_start = lives
         self.output_size = output_size
         self.framerate = framerate
         self.game = self.init_game()
+        self.cur_score = self.game.score
         self.iteration = 0
         self.iteration_max = 15 * 60 * self.game.framerate  # 15 minutes
         self.init_obs = self.get_state()
-
         self.action_space = Discrete(3)
-        self.observation_space = Box(low=0, high=800, shape=(self.lidar_n_beams * 2, 1), dtype=np.float16)
-
-        self.reward_range = (-1, 0, 1)
+        self.observation_space = MultiDiscrete([800, 800, 800, 800, 20, 20, 2, 2])
 
     def init_game(self):
         game = Game(
             mode=self.mode,
-            lives=self.lives_start
+            lives=self.lives_start,
+            framerate=self.framerate
         )
         return game
 
@@ -72,15 +69,12 @@ class BreakoutEnv(gym.Env):
 
         # Step frame
 
-        print(action)
-
         self.game.step_frame(action)
         self.iteration += 1
 
         # Gather observation
         observation = self.get_state()
 
-        print(observation)
         # Check stop conditions
         if self.game.lives == 0:
             done = True
@@ -93,7 +87,11 @@ class BreakoutEnv(gym.Env):
         info = {
             'iteration': self.iteration
         }
-
+        cur_score = self.game.score
+        reward = 0
+        if cur_score > self.cur_score:
+            reward = 1
+            self.cur_score = cur_score
         return (observation, reward, done, info)
 
     def reset(self):
@@ -173,16 +171,19 @@ class BreakoutEnv(gym.Env):
         return [seed]
 
     def get_state(self):
-        self.lidar.sync_position(self.game.player)
-        ls_radius, ls_collide = self.lidar.scan(
-            collide_sprites=self.game.rocks
-        )
-        array_radius = np.array(ls_radius)
-        array_radius = array_radius / (self.lidar_max_radius_pct * self.game.screen_size)
-        array_collide = np.array(ls_collide)
-        array_state = np.concatenate([array_radius, array_collide])
-        array_state = array_state.reshape((len(array_state), 1))
-        return array_state
+        s = [
+            self.game.paddle.rect.x,
+            self.game.paddle.rect.y,
+            self.game.ball.rect.x,
+            self.game.ball.rect.y,
+            abs(self.game.ball.velocity[0]),
+            abs(self.game.ball.velocity[1]),
+            int(self.game.ball.velocity[0] > 0),
+            int(self.game.ball.velocity[1] > 0),
+        ]
+        return s
+          
+      
         
     def get_rgb_state(self):
         rgb_array = self.get_rgb_array()

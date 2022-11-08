@@ -13,7 +13,7 @@ from example.breakout.ball import Ball
 from example.breakout.brick import Brick
 
 class Game:
-    def __init__( self, mode='human',  lives=3):
+    def __init__( self, mode='human',  lives=3, framerate = 60):
         pygame.init()
         # Define some colors
         self.WHITE = (255,255,255)
@@ -51,6 +51,7 @@ class Game:
         self.score = 0
         self.lives = lives
         self.mode = mode
+        self.framerate = framerate
         if self.mode == 'human':
             self.screen_mode = pygame.SHOWN
         else:
@@ -198,6 +199,3 @@ class Game:
             self.render_screen()
             # --- Limit to 60 frames per second
             self.clock.tick(60)
-
-breakout = Game()
-breakout.play()
