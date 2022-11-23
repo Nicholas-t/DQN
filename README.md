@@ -172,3 +172,93 @@ n=2 & \rightarrow G_t^2 = R_{t+1} + \gamma R_{t+2} + \gamma^2 V(S_{t+2})\\
 n=\infty & \rightarrow G_t^\infty = R_{t+1} + \gamma R_{t+2} + ... + \gamma^{T-1} R_T \implies MC
 \end{aligned}
 $$
+
+
+# TO ADD CODE EXAMPLE HERE
+
+
+### Estimation of action value function with Q-value
+
+Given our framework of reinforcement learning defined above, we can now discuss about the framework of *Q learning*. Q learning is a reinforcement learning policy that is based on the process of assigning a certain value Q for every state and action pair and this process boils down to generate a function Q such that with the goal of estimating an **action-value function** such that:
+
+$$
+\begin{align*}
+  Q \colon (S \times A) &\to \mathbb{R} \\
+  (s, a) &\mapsto q.
+\end{align*}
+$$
+
+Where if $s \in S$ and $a \in A$, we have $Q(s, a)$ represents the value of the action $a$ when taken at a state $s$ and the optimal $Q^*(s, a)$ is one that represents $max_\pi\mathbb{E}[\sum_{t'=t}^T\gamma^{t'-t}r_{t'} | s_t=s, a_t=a, \pi]$ with T being the final state of our environment.
+
+The algorithm updates the Q function using the **Bellman equation** which is an iterative method that updayes a new function using the weighted average of the current value and the new information, assuming we wil always take the best action.
+
+$$
+Q^{new}(s_t, a_t) =  (1-\underbrace{\alpha}_\text{learning rate})\overbrace{Q(s_t, a_t)}^\text{Current value}  + \underbrace{\alpha}_\text{learning rate} \times ( \overbrace{r_t}^\text{current reward} + \underbrace{\gamma}_\text{discount factor} \times \overbrace{max_a Q(s_{t+1}, a)}^\text{future value while action maximized} )
+$$
+
+The above equation can also be simplified using to be the following iterative method:
+
+$$
+\begin{aligned}
+Q^{new}(s_t, a_t) &= Q(s_t, a_t) - \alpha Q(s_t, a_t) + \alpha  r_t + \alpha \gamma max_a Q(s_{t+1}, a)\\
+&= Q(s_t, a_t) + \alpha (r + \gamma max_a Q(s_{t+1}, a) - Q(s_t, a_t))
+\end{aligned}
+$$
+
+**Remark:** Just like before, we can denote the $r + \gamma max_a Q(s_{t+1}, a)$ to be the **target**
+
+
+Thus in a nutshell, the algorithm works as the following:
+
+```
+Q function is initialized by the programmer to an arbitrary value
+For every episode t:
+    Initialize S
+    For every step of episode:
+        Choosing an A from S using policy derived from Q
+        Take action A
+        Observe a reward R
+        Update Q based on the Bellman equation
+        S = S'
+    Until S is the terminal
+If stopping cretiria is met (number of episodes reached t or Q function is not changed) then stop
+```
+
+note that the Q function in ourcase for a discrete state and action space, it can very be a matrix with a bijection from each row to the state space and each column to the action space.
+
+
+### $\epsilon$-greedy policy
+
+We recall that a greedy policy improvement over $Q(s, a)$ is $$\pi'(s)=\text{argmax}_{a \in \mathcal{A}} Q(s, a)$$
+
+We define a $\epsilon$-greeedy policy is the simplest idea to ensure a we keep exploring even when we are happy enough with our exploitation such that every action will be played with a non-zero probability.
+
+Practically speaking, we can define our policy as an array of non zeros with the size of our action space. Then using our action state value function, we can look for the index of the policy array that represents the best action. An example code can be viewed below
+
+```
+# source : https://www.geeksforgeeks.org/q-learning-in-python/
+Action_probabilities = np.ones(num_actions,
+        dtype = float) * epsilon / num_actions
+
+best_action = np.argmax(Q[state])
+Action_probabilities[best_action] += (1.0 - epsilon)
+```
+
+# TO ADD EXAMPLE HERE
+
+## Deep Q Network
+
+As before, we have that $Q(s, a)$ is a mapping of a pair $s \in S$ and $a \in A$ to a certain measure of value of our agent being in the state $s$ and do an action $a$. Now then consider a situation where we are training an agent to an environment where there are 4 different states in the game and the agent can only have 2 actions. Thus, our Q function as we defined it, will have to optimize 4 x 2 different values to cover all possible state and action pair. Seems easy enough!
+
+Now assume we want to train an agent to play the popular game of FIFA, where the input is the pixels which means the state space is represented by every possible combinations of pixels in the screen, not to mention the action space in a console is much more complex. One can clearly see how complex can calculating the Q function be.
+
+In this case, what we need is an approximation method to find our Q, and what better tool can be used to approximate a function than a neural network. This very network used to approximate the Q value is called the **Deep Q network**.
+
+let's define this Q-network to be $Q(s, a ; w)$ with certain $w$ to be the weights of the network.
+
+DQN works as the folowing, 
+- We first take an action $a_t$ according to $\epsilon$-greedy policy
+- Then we store the transition variable ($s_t$, $a_t$, $r_{t+1}$, $s_{t+1}$) in a memory set $\mathcal{D}$
+
+# TO ADD EXAMPLE HERE
+
