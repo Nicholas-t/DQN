@@ -28,5 +28,5 @@ We firstly define :
 
 the classic example that we often see to better understand this notion is for example the atari game Breakout. Our agent (the paddle) will need the state space to be able to let it understand the environment best, therefore $S$ will be the tuple of all the coordinates of bricks that are still not yet hit by the ball, the coordinate of the ball, and the coordinate of the paddle. and the set $A$ is simply a set of 2 actions whether the paddle to go left or right.
 
-![Breakout_game_screenshot.png](attachment:Breakout_game_screenshot.png)
+![Breakout_game_screenshot.png](https://github.com/Nicholas-t/M2_TSE_DSSS_Deep_Reinforcement_Learning_Notebook/blob/main/images/Breakout_game_screenshot.png)
 Source : [Wikipedia](https://en.wikipedia.org/wiki/Breakout_(video_game))
