@@ -69,6 +69,3 @@ And here is the an episode of the final model
   <img src="https://github.com/Nicholas-t/DQN/blob/main/images/cartpole_dqn_with_replay.gif"/>
 </p>
 
-## Credits
-
-
