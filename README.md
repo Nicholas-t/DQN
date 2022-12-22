@@ -1,3 +1,9 @@
+
+<p align="center">
+  <img src="https://github.com/Nicholas-t/DQN/blob/main/images/banner.png"/>
+</p>
+
+
 # DQN on the CartPole gym environment
 
 This repository contains an implementation of Deep Q Network using PyTorch specifically to solve the CartPole environment.
@@ -5,11 +11,15 @@ This repository contains an implementation of Deep Q Network using PyTorch speci
 ## Environment and dependencies
 
 - OS : Ubuntu 20.04.2 LTS
-- Python 3.7 (Tensorflow 1.15 works at this version)
+- Python 3.7
 - PIP
 
 if you have python version above 3.7, then refer to [this](https://phoenixnap.com/kb/how-to-install-python-3-ubuntu) tutorial on how you can install a specific python version in your ubuntu machine
 
+
+## Organization
+
+All of the code regarding the DQN is in the `./scripts` folder. The `notebook.ipynb` contains explanations regarding DQN and more context regarding the algorithm of interest.
 
 ## How to install ?
 
@@ -31,16 +41,33 @@ If you have jupyter notebook, you can simply run the cells that included the cod
 2. Definitions and  Framework of Reinforcement Learning
 3. Markov Decision Process (MDP)
 4. Estimation of state value function
-  1. Monte Carlo methods
-  2. Temporal Differences
+  - Monte Carlo methods
+  - Temporal Differences
 5. Estimation of action value function with Q-value
 6. Deep Q Network
-  1. Simple DQN
-  2. DQN with experience replay
+  - Simple DQN
+  - DQN with experience replay
 7. Conclusion
 
-## Results
+## Overview and results
 
+In this repository, we implemented DQN with the following architecture
+
+<p align="center">
+  <img src="https://github.com/Nicholas-t/DQN/blob/main/images/architecture.png"/>
+</p>
+
+With experience replay, I managed converge my model in less than 150 iterations of training loop.
+
+<p align="center">
+  <img src="https://github.com/Nicholas-t/DQN/blob/main/images/result.png"/>
+</p>
+
+And here is the an episode of the final model
+
+<p align="center">
+  <img src="https://github.com/Nicholas-t/DQN/blob/main/images/cartpole_dqn_with_replay.gif"/>
+</p>
 
 ## Credits
 
