@@ -2,7 +2,6 @@ import torch
 from scripts.dqn.dqn import DQN
 import random
 
-# Expand DQL class with a replay function.
 class DQN_replay(DQN):
     # new replay function
     def replay(self, memory, size, gamma=0.9):
