@@ -17,6 +17,7 @@ class DQN:
             torch.nn.LeakyReLU(),
             torch.nn.Linear(hidden_dim * 2, action_dim),
         )
+        
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr)
         self.action_dim = action_dim
 
