@@ -114,3 +114,5 @@ And here is the an episode of the DDQN final model
 2. [Playing Atari with Deep Reinforcement Learning - Mnih, Kavukcuoglu, Silver, Graves, Antonoglou, Wierstra, Riedmiller](https://arxiv.org/pdf/1312.5602.pdf)
 
 3. [Deepmind RL with David Silver](https://www.deepmind.com/learning-resources/introduction-to-reinforcement-learning-with-david-silver)
+
+4. And thankyou for professor [Adil Zouitine](https://boring-guy.sh) for his support on making my model to work
